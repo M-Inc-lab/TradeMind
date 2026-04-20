@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html><head><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:360px;background:#0f172a;color:#fff;font-family:system-ui,sans-serif}
+.hdr{background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:16px;border-radius:12px 12px 0 0}
+.hdr h1{font-size:16px;font-weight:700}
+.hdr p{font-size:11px;opacity:.8;margin-top:2px}
+.c{padding:16px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.crd{background:#1e293b;padding:14px;border-radius:10px;text-align:center}
+.v{font-size:28px;font-weight:700}
+.v.good{color:#22c55e}.v.warn{color:#eab308}.v.bad{color:#ef4444}
+.l{font-size:10px;color:#94a3b8;text-transform:uppercase;margin-top:4px}
+.sig{margin-top:14px}
+.sig h3{font-size:10px;color:#94a3b8;text-transform:uppercase;margin-bottom:6px}
+.sig-item{background:#1e293b;padding:10px;border-radius:6px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.sig-buy{border-left:3px solid #22c55e}.sig-sell{border-left:3px solid #ef4444}
+.pnl{font-weight:600}.pos{color:#22c55e}.neg{color:#ef4444}
+.btn{width:100%;padding:10px;background:#22c55e;border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;margin-top:10px}
+.btn:hover{background:#16a34a}
+.broker{margin-top:14px;padding:10px;background:#1e293b;border-radius:8px;font-size:11px;color:#94a3b8}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;background:#22c55e}
+</style></head>
+<body>
+<div class="hdr"><h1>🤖 TradeMind AI</h1><p>LLM-Powered Indian Stock Trading</p></div>
+<div class="c">
+  <div class="g">
+    <div class="crd"><div class="v warn" id="acc">--</div><div class="l">Accuracy</div></div>
+    <div class="crd"><div class="v" id="trades">--</div><div class="l">Trades</div></div>
+    <div class="crd"><div class="v good" id="buy">--</div><div class="l">BUY Acc</div></div>
+    <div class="crd"><div class="v" id="avg">--</div><div class="l">Avg Win</div></div>
+  </div>
+  <div class="sig"><h3>Recent Signals</h3><div id="sigs"><div style="color:#64748b;font-size:12px;text-align:center;padding:10px">Loading...</div></div></div>
+  <button class="btn" onclick="trade()">📊 Trade INFY BUY</button>
+  <div class="broker"><span class="dot"></span>Dhan: Connected (Sandbox)</div>
+</div>
+<script>
+async function load() {
+  try {
+    const r = await fetch('https://morningstar.zo.space/api/backtest/llm-accuracy?symbols=RELIANCE,INFY,TCS&start=2024-01-01&end=2025-04-01');
+    const d = await r.json();
+    if(d.summary) {
+      const s = d.summary;
+      document.getElementById('acc').textContent = s.accuracy.toFixed(1) + '%';
+      document.getElementById('acc').className = 'v ' + (s.accuracy>=85?'good':s.accuracy>=60?'warn':'bad');
+      document.getElementById('trades').textContent = s.totalTrades;
+      document.getElementById('buy').textContent = (s.buyAccuracy||0).toFixed(1) + '%';
+      document.getElementById('avg').textContent = '+' + (s.avgWinPct||0).toFixed(1) + '%';
+    }
+    if(d.recentTrades) {
+      document.getElementById('sigs').innerHTML = d.recentTrades.slice(0,5).map(t =>
+        `<div class="sig-item sig-${t.signal.toLowerCase()}"><span>${t.signal} ${t.symbol}</span><span class="pnl ${t.win?'pos':'neg'}">${t.win?'+':''}${t.pnlPct.toFixed(1)}%</span></div>`
+      ).join('');
+    }
+  } catch(e) { console.error(e); }
+}
+async function trade() {
+  const r = await fetch('https://morningstar.zo.space/api/dhan/papertrade?symbol=INFY&signal=BUY&quantity=5',{method:'POST'});
+  const d = await r.json();
+  alert(d.orderId ? 'Order #' + d.orderId + ' placed!' : 'Error: ' + JSON.stringify(d));
+}
+load();
+</script>
+</body></html>

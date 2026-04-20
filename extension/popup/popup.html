@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang=​'en'>
+<head>
+  <meta charset=​'UTF-8'>
+  <meta name=​'viewport' content=​'width=device-width, initial-scale=1.0'>
+  <title>TradeMind AI</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 380px; min-height: 500px; font-family: 'Segoe UI', sans-serif; background: #0f0f1a; color: #fff; }
+    .header { padding: 16px; background: linear-gradient(135deg, #1a1a2e, #16213e); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .header h1 { font-size: 18px; display: flex; align-items: center; gap: 8px; }
+    .market-bar { display: flex; gap: 12px; padding: 12px 16px; background: rgba(255,255,255,0.03); }
+    .market-item { flex: 1; padding: 8px; background: rgba(255,255,255,0.05); border-radius: 8px; text-align: center; }
+    .market-item .symbol { font-size: 11px; color: #888; }
+    .market-item .price { font-size: 16px; font-weight: 700; }
+    .market-item .change { font-size: 11px; }
+    .up { color: #00c853; }
+    .down { color: #ff1744; }
+    .tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+    .tab:hover { background: rgba(255,255,255,0.05); }
+    .tab.active { background: rgba(0,188,212,0.2); color: #00bcd4; border-bottom: 2px solid #00bcd4; }
+    .content { padding: 16px; height: calc(100vh - 200px); overflow-y: auto; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .card { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+    .card-title { font-size: 14px; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .signal { display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(0,200,83,0.1); border-radius: 8px; margin-bottom: 8px; }
+    .signal.bearish { background: rgba(255,23,68,0.1); }
+    .signal-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .signal.bullish .signal-icon { background: rgba(0,200,83,0.3); }
+    .signal.bearish .signal-icon { background: rgba(255,23,68,0.3); }
+    .signal-info { flex: 1; }
+    .signal-stock { font-weight: 600; font-size: 14px; }
+    .signal-detail { font-size: 11px; color: #888; }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, #00bcd4, #00838f); color: #fff; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,188,212,0.3); }
+    .btn-trade { background: linear-gradient(135deg, #00c853, #009624); color: #fff; }
+    .btn-trade:hover { box-shadow: 0 4px 12px rgba(0,200,83,0.3); }
+    .input-group { margin-bottom: 12px; }
+    .input-group label { display: block; font-size: 12px; color: #888; margin-bottom: 6px; }
+    .input-group input, .input-group select { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 14px; }
+    .chat-messages { height: 280px; overflow-y: auto; margin-bottom: 12px; }
+    .message { padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; max-width: 90%; }
+    .message.ai { background: rgba(0,188,212,0.15); border-bottom-left-radius: 4px; }
+    .message.user { background: rgba(255,255,255,0.1); border-bottom-right-radius: 4px; margin-left: auto; }
+    .chat-input { display: flex; gap: 8px; }
+    .chat-input input { flex: 1; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; }
+    .chat-input button { padding: 10px 16px; background: #00bcd4; border: none; border-radius: 8px; color: #fff; cursor: pointer; }
+    .strategy-item { padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 8px; }
+    .strategy-item .name { font-weight: 600; font-size: 13px; }
+    .strategy-item .stats { display: flex; gap: 12px; margin-top: 6px; font-size: 11px; color: #888; }
+    .stat { display: flex; align-items: center; gap: 4px; }
+    .stat.positive { color: #00c853; }
+    .stat.negative { color: #ff1744; }
+    .footer { padding: 12px 16px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .connection-status { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #00c853; }
+    .status-dot.disconnected { background: #ff1744; }
+  </style>
+</head>
+<body>
+  <div class=​'header'>
+    <h1>📈 TradeMind AI</h1>
+  </div>
+  
+  <div class=​'market-bar'>
+    <div class=​'market-item'>
+      <div class=​'symbol'>NIFTY 50</div>
+      <div class=​'price' id=​'nifty-price'>—</div>
+      <div class=​'change up' id=​'nifty-change'>—</div>
+    </div>
+    <div class=​'market-item'>
+      <div class=​'symbol'>BANK NIFTY</div>
+      <div class=​'price' id=​'bn-price'>—</div>
+      <div class=​'change up' id=​'bn-change'>—</div>
+    </div>
+    <div class=​'market-item'>
+      <div class=​'symbol'>SENSEX</div>
+      <div class=​'price' id=​'sensex-price'>—</div>
+      <div class=​'change up' id=​'sensex-change'>—</div>
+    </div>
+  </div>
+  
+  <div class=​'tabs'>
+    <div class=​'tab active' data-tab=​'signals'>Signals</div>
+    <div class=​'tab' data-tab=​'trade'>Trade</div>
+    <div class=​'tab' data-tab=​'chat'>AI Chat</div>
+    <div class=​'tab' data-tab=​'strategies'>Strategies</div>
+  </div>
+  
+  <div class=​'content'>
+    <div class=​'section active' id=​'signals'>
+      <div class=​'card'>
+        <div class=​'card-title'>🎯 Top Buy Signals</div>
+        <div id=​'buy-signals'></div>
+      </div>
+      <div class=​'card'>
+        <div class=​'card-title'>⚠️ Top Sell Signals</div>
+        <div id=​'sell-signals'></div>
+      </div>
+      <div class=​'card'>
+        <div class=​'card-title'>📊 Market Mood</div>
+        <div id=​'market-mood'></div>
+      </div>
+    </div>
+    
+    <div class=​'section' id=​'trade'>
+      <div class=​'input-group'>
+        <label>Stock Symbol</label>
+        <input type=​'text' id=​'trade-symbol' placeholder=​'e.g., RELIANCE, TCS, NIFTY' value=​'NIFTY'>
+      </div>
+      <div class=​'input-group'>
+        <label>Action</label>
+        <select id=​'trade-action'>
+          <option value=​'BUY'>BUY</option>
+          <option value=​'SELL'>SELL</option>
+        </select>
+      </div>
+      <div class=​'input-group'>
+        <label>Quantity</label>
+        <input type=​'number' id=​'trade-qty' placeholder=​'Quantity' value=​'1'>
+      </div>
+      <div class=​'input-group'>
+        <label>Order Type</label>
+        <select id=​'trade-type'>
+          <option value=​'MARKET'>Market Order</option>
+          <option value=​'LIMIT'>Limit Order</option>
+          <option value=​'SL'>Stop Loss</option>
+          <option value=​'SL-M'>Stop Loss Market</option>
+        </select>
+      </div>
+      <div class=​'input-group'>
+        <label>Price (for Limit/SL)</label>
+        <input type=​'number' id=​'trade-price' placeholder=​'Trigger price'>
+      </div>
+      <div id=​'trade-preview' style=​'margin-bottom: 12px; padding: 12px; background: rgba(0,188,212,0.1); border-radius: 8px; display: none;'></div>
+      <button class=​'btn btn-trade' onclick=​'executeTrade()'>⚡ Execute Trade</button>
+      <div id=​'trade-result' style=​'margin-top: 12px;'></div>
+    </div>
+    
+    <div class=​'section' id=​'chat'>
+      <div class=​'chat-messages' id=​'chat-messages'>
+        <div class=​'message ai'>Namaste! I'm TradeMind AI. I can help you with:</div>
+        <div class=​'message ai'>• Stock analysis and signals<br>• Trade execution<br>• Strategy optimization<br>• Market insights<br><br>What would you like to know?</div>
+      </div>
+      <div class=​'chat-input'>
+        <input type=​'text' id=​'chat-input' placeholder=​'Ask about stocks, strategies...' onkeypress=​'if(event.key===\"Enter\")sendChat()'>
+        <button onclick=​'sendChat()'>➤</button>
+      </div>
+    </div>
+    
+    <div class=​'section' id=​'strategies'>
+      <div class=​'card'>
+        <div class=​'card-title'>🧬 Evolution Status</div>
+        <div id=​'evo-status'></div>
+      </div>
+      <div class=​'card'>
+        <div class=​'card-title'>🏆 Active Strategies</div>
+        <div id=​'strategy-list'></div>
+      </div>
+      <button class=​'btn btn-primary' onclick=​'runEvolution()'>▶️ Run Evolution Cycle</button>
+    </div>
+  </div>
+  
+  <div class=​'footer'>
+    <div class=​'connection-status'>
+      <div class=​'status-dot' id=​'status-dot'></div>
+      <span id=​'status-text'>Connected to TradeMind Cloud</span>
+    </div>
+  </div>
+  
+  <script src=​'popup.js'></script>
+</body>
+</html>

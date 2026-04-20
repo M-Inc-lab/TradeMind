@@ -1,0 +1,616 @@
+/* TradeMind AI - Overlay Styles */
+
+#trademind-overlay {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  z-index: 999999;
+}
+
+.trademind-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 360px;
+  height: 520px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.trademind-widget.hidden {
+  transform: translateX(400px);
+  opacity: 0;
+}
+
+.trademind-widget.minimized {
+  height: 60px;
+  overflow: hidden;
+}
+
+.trademind-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.trademind-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-icon {
+  font-size: 20px;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 15px;
+  background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.trademind-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.trademind-controls button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.trademind-controls button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Market Bar */
+.trademind-market-bar {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.market-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.market-item .symbol {
+  font-size: 11px;
+  color: #888;
+  font-weight: 600;
+}
+
+.market-item .price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.market-item .change {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.market-item .change.positive {
+  color: #00e676;
+}
+
+.market-item .change.negative {
+  color: #ff5252;
+}
+
+/* Tabs */
+.trademind-tabs {
+  display: flex;
+  padding: 8px 12px;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.trademind-tabs .tab {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  color: #888;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.trademind-tabs .tab:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.trademind-tabs .tab.active {
+  background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+  color: #fff;
+}
+
+/* Content Area */
+.trademind-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Dashboard */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.signal-card {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.signal-card.buy-signal {
+  border-color: rgba(0, 230, 118, 0.3);
+  background: linear-gradient(135deg, rgba(0, 230, 118, 0.1), transparent);
+}
+
+.signal-card.sell-signal {
+  border-color: rgba(255, 82, 82, 0.3);
+  background: linear-gradient(135deg, rgba(255, 82, 82, 0.1), transparent);
+}
+
+.signal-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.signal-icon {
+  font-size: 16px;
+}
+
+.signal-type {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.buy-signal .signal-type {
+  color: #00e676;
+}
+
+.sell-signal .signal-type {
+  color: #ff5252;
+}
+
+.signal-details {
+  font-size: 12px;
+}
+
+.stock-name {
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.entry-price, .target, .stop-loss, .confidence {
+  color: #aaa;
+  margin-bottom: 3px;
+}
+
+.confidence {
+  color: #00d4ff;
+  font-weight: 600;
+}
+
+.btn-trade {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.buy-signal .btn-trade {
+  background: linear-gradient(135deg, #00e676, #00c853);
+  color: #000;
+}
+
+.sell-signal .btn-trade {
+  background: linear-gradient(135deg, #ff5252, #d32f2f);
+  color: #fff;
+}
+
+.btn-trade:hover {
+  transform: scale(1.02);
+}
+
+/* AI Explanation */
+.ai-explanation {
+  background: rgba(123, 47, 247, 0.1);
+  border: 1px solid rgba(123, 47, 247, 0.3);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.explanation-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #7b2ff7;
+}
+
+.ai-icon {
+  font-size: 14px;
+}
+
+.explanation-text p {
+  color: #ccc;
+  line-height: 1.5;
+  margin: 0 0 8px 0;
+}
+
+.btn-learn-more {
+  padding: 6px 12px;
+  border: 1px solid #7b2ff7;
+  background: transparent;
+  color: #7b2ff7;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.btn-learn-more:hover {
+  background: rgba(123, 47, 247, 0.2);
+}
+
+/* Signals List */
+.signals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.signal-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.signal-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.signal-badge.buy {
+  background: rgba(0, 230, 118, 0.2);
+  color: #00e676;
+}
+
+.signal-badge.sell {
+  background: rgba(255, 82, 82, 0.2);
+  color: #ff5252;
+}
+
+.signal-info {
+  flex: 1;
+}
+
+.signal-info .stock {
+  font-weight: 600;
+  color: #fff;
+}
+
+.signal-info .price {
+  font-size: 11px;
+  color: #888;
+}
+
+.signal-score {
+  font-size: 14px;
+  font-weight: 700;
+  color: #00d4ff;
+}
+
+/* Portfolio */
+.portfolio-summary {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-item {
+  flex: 1;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.summary-item .label {
+  display: block;
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.summary-item .value {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.summary-item.profit .value {
+  color: #00e676;
+}
+
+.positions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.position-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.position-info .stock {
+  font-weight: 600;
+  color: #fff;
+}
+
+.position-info .qty {
+  font-size: 11px;
+  color: #888;
+}
+
+.position-pnl {
+  text-align: right;
+}
+
+.position-pnl .current {
+  font-weight: 600;
+  color: #fff;
+}
+
+.position-pnl .pnl {
+  font-size: 12px;
+}
+
+.position-pnl .pnl.positive {
+  color: #00e676;
+}
+
+.position-pnl .pnl.negative {
+  color: #ff5252;
+}
+
+/* Chat */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.message {
+  margin-bottom: 12px;
+}
+
+.message-content {
+  padding: 10px 14px;
+  border-radius: 12px;
+  line-height: 1.5;
+}
+
+.message.user .message-content {
+  background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+  color: #fff;
+  margin-left: 30px;
+}
+
+.message.bot .message-content {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  margin-right: 30px;
+}
+
+.message-content ul {
+  margin: 8px 0 0 0;
+  padding-left: 18px;
+}
+
+.message-content li {
+  margin-bottom: 4px;
+}
+
+.chat-input-container {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+#chat-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 13px;
+}
+
+#chat-input::placeholder {
+  color: #666;
+}
+
+#btn-send {
+  width: 40px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Footer */
+.trademind-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.market-mood {
+  display: flex;
+  align-items: center;
+}
+
+.mood-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mood-indicator.positive {
+  color: #00e676;
+}
+
+.mood-indicator.negative {
+  color: #ff5252;
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #888;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: #00e676;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Floating Toggle */
+.trademind-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+  display: none;
+  z-index: 999998;
+}
+
+.trademind-toggle:hover {
+  transform: scale(1.1);
+}
+
+.trademind-widget.hidden ~ .trademind-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Scrollbar */
+.trademind-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.trademind-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.trademind-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+  .trademind-widget {
+    width: 100%;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px 16px 0 0;
+  }
+}
